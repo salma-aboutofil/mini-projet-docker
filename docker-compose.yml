@@ -1,0 +1,26 @@
+version: '3'
+services:
+  api:
+    image: supmit-api
+    volumes:
+      - ./simple_api/student_age.json:/data/student_age.json
+    ports:
+      - "5000:5000"
+    networks:
+      - supmit-network
+  website:
+    image: php:apache
+    environment:
+      - USERNAME=root
+      - PASSWORD=root
+    volumes:
+      - ./website:/var/www/html
+    depends_on:
+      - api
+    ports:
+      - "8091:80"
+    networks:
+      - supmit-network
+networks:
+  supmit-network:
+    driver: bridge

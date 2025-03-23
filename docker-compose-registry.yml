@@ -1,0 +1,27 @@
+version: '3'
+services:
+  registry:
+    image: registry:2
+    container_name: my-registry
+    ports:
+      - "5001:5000"  
+    volumes:
+      - ./data:/var/lib/registry
+    environment:
+      REGISTRY_HTTP_HEADERS: |
+        Access-Control-Allow-Origin: ['http://localhost:8081']
+        Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS']
+        Access-Control-Allow-Headers: ['Authorization']
+    restart: always
+  registry-ui:
+    image: joxit/docker-registry-ui:latest
+    container_name: registry-ui
+    ports:
+      - "8081:80"
+    environment:
+      - REGISTRY_TITLE=Mon Docker Registry
+      - REGISTRY_URL=http://localhost:5001  
+      - SINGLE_REGISTRY=true
+    depends_on:
+      - registry
+    restart: always

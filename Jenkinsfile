@@ -29,10 +29,10 @@ pipeline {
 
         stage('Push to Docker Hub') {
             steps {
-                withCredentials([string(credentialsId: 'dockerhub-password', variable: 'DOCKER_HUB_PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-password', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]){
                     bat '''
-                        echo %DOCKER_HUB_PASS% > pass.txt
-                        docker login -u omellah --password-stdin < pass.txt
+                        echo %DOCKER_PASS% > pass.txt
+                        docker login -u %DOCKER_USER% --password-stdin < pass.txt
                         docker push %IMAGE_NAME%:%TAG%
                         docker logout
                         del pass.txt

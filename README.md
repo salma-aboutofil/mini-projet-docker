@@ -1,10 +1,49 @@
-# Mini-Projet-Docker : Conteneurisation d'une Application avec Docker
 
 ## Auteurs
 - Aboutofil Salma
 - Dellahi Hiba
 - Ibourk Khadija
+# Déploiement Automatisé d'une Application Web avec CI/CD sur Jenkins et AWS
+## 1. Création de l’Image Docker : 
+- Dans cette première étape, on a commencé par construire l’image Docker de notre application web statique. Depuis le terminal, on s’est placés dans le dossier contenant notre projet (student_list), puis on a exécuté la commande suivante :
+` docker build -t supmit-static-site . `
+- Comme on le voit dans la capture, Docker a d’abord chargé le Dockerfile, puis il a téléchargé l’image de base nginx:alpine depuis Docker Hub.
+![alt text](image.png)
+- Une fois le build terminé, on a vérifié dans l’interface Docker Desktop que l’image supmit-static-site:latest avait bien été générée. 
+![alt text](image-1.png)
+- Le site était accessible localement et affichait un message de bienvenue : "Welcome to Student Checking App", invitant les utilisateurs à cliquer sur un bouton pour lister les étudiants et leurs âges.
+![alt text](image-2.png)
+![alt text](image-3.png)
+## 2. Configuration de Docker Hub : 
+- Nous avons configuré l’authentification avec Docker Hub en utilisant un jeton d’accès. La commande docker login -u kbaijalb a été utilisée, suivie de la saisie du jeton. Ce jeton avait des permissions en lecture seule pour les dépôts publics. Cette étape était cruciale pour pouvoir pousser l’image vers Docker Hub.
+![alt text](image-4.png)
+![alt text](image-5.png)
+## 3. Intégration avec Jenkins :
+- On a créé  un pipeline nommé mini-projet-Docker automatiser les étapes CI/CD.
+![alt text](image-6.png)
+![alt text](image-7.png)
+![alt text](image-8.png)
+![alt text](image-9.png)
+![alt text](image-10.png)
+## 4. Configuration et Lancement d'une Instance EC2 sur AWS : 
+- Nous avons suivi les étapes pour configurer et lancer une instance Amazon EC2. Tout d'abord, nous avons sélectionné une Amazon Machine Image (AMI) basée sur Ubuntu 24.04, qui définit la configuration logicielle de l'instance. Ensuite, nous avons choisi le type d'instance t3.micro, configuré un nouveau groupe de sécurité pour le pare-feu, et laissé les paramètres de stockage par défaut.
+![alt text](image-11.png)
+- Puis, nous avons créé une paire de clés pour sécuriser la connexion à l'instance, en optant pour le type RSA avec un format de fichier .pem compatible OpenSSH. Les paramètres réseau ont été laissés par défaut, utilisant un VPC existant et un sous-réseau automatique. Enfin, nous avons vérifié les détails de l'instance avant de la lancer, avec la possibilité de prévisualiser le code de configuration. Ces étapes permettent de déployer une instance EC2 sécurisée et fonctionnelle sur AWS.
+![alt text](image-12.png)
+![alt text](image-13.png)
 
+## 5.Déploiement de l'application:
+- Nous nous sommes connectés en SSH à l'instance Ubuntu en utilisant une paire de clés (staticsite.pem).
+![alt text](image-14.png)
+-Puis nous avons vérifié que le service Docker était actif et fonctionnel.
+![alt text](image-15.png)
+![alt text](image-16.png)
+Ensuite, nous avons tenté de télécharger (docker pull) une image Docker nommée khadijah/supmit-static-site, mais comme elle n'existait pas initialement, nous l'avons poussée (docker push) vers Docker Hub après l'avoir créée localement. Après un nouveau docker pull, l'image a été récupérée avec succès.
+![alt text](image-17.png)
+
+- Enfin, nous avons lancé un conteneur (docker run) en mappant le port 8087 de l'hôte vers le port 80 du conteneur, ce qui a permis d'héberger l'application statique accessible via un navigateur.
+![alt text](image-18.png)
+# Mini-Projet-Docker : Conteneurisation d'une Application avec Docker
 ## Description du Projet
 Ce projet consiste à conteneuriser une application Python avec Flask en utilisant Docker. L'application est composée de deux modules :
 1. Une API REST en Python qui fournit la liste des étudiants.
